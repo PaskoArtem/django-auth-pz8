@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <h1 class="mb-4">Дашборд курсов</h1>
+
+    {% include 'dashboard/dashboard_nav.html' %}
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get">
+            <div class="row align-items-end g-3">
+
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Поиск курса</label>
+                    <input type="text"
+                           name="search"
+                           id="search"
+                           class="form-control"
+                           placeholder="Введите название курса"
+                           value="{{ search_query }}">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="department" class="form-label">Кафедра</label>
+                    <select name="department" id="department" class="form-select">
+                        <option value="">Все кафедры</option>
+
+                        {% for department in departments %}
+                            <option value="{{ department.id }}"
+                                {% if selected_department == department.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}>
+                                {{ department.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="sort" class="form-label">Сортировка</label>
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="students_desc"
+                            {% if sort_order == "students_desc" %}selected{% endif %}>
+                            По количеству студентов ↓
+                        </option>
+
+                        <option value="students_asc"
+                            {% if sort_order == "students_asc" %}selected{% endif %}>
+                            По количеству студентов ↑
+                        </option>
+
+                        <option value="title"
+                            {% if sort_order == "title" %}selected{% endif %}>
+                            По названию
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Применить
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+    <div class="row g-4 mb-4">
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Курсы</h6>
+                <h2>{{ courses_count }}</h2>
+                <p class="mb-0 text-muted">
+                    Всего курсов в системе
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5 class="card-title mb-3">
+            Учебные курсы
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Курс</th>
+                        <th>Кафедра</th>
+                        <th>Количество студентов</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for course in courses_data %}
+                        <tr>
+                            <td>{{ course.title }}</td>
+                            <td>{{ course.department }}</td>
+                            <td>{{ course.students_count }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3"
+                                class="text-center text-muted">
+                                Курсы отсутствуют
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            Количество студентов по курсам
+        </h5>
+
+        <div style="height: 400px;">
+            <canvas id="studentsByCourseChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const courseNames = [
+        {% for course in courses_data %}
+            "{{ course.title|escapejs }}",
+        {% endfor %}
+    ];
+
+    const courseStudentCounts = [
+        {% for course in courses_data %}
+            {{ course.students_count }},
+        {% endfor %}
+    ];
+
+    new Chart(
+        document.getElementById('studentsByCourseChart'),
+        {
+            type: 'bar',
+
+            data: {
+                labels: courseNames,
+
+                datasets: [{
+                    label: 'Количество студентов',
+                    data: courseStudentCounts
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+</script>
+
+</div>
+{% endblock %}

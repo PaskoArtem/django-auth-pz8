@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <h1 class="mb-4">Дашборды</h1>
+
+    {% include 'dashboard/dashboard_nav.html' %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get">
+                <div class="row align-items-end">
+                    <div class="col-md-8">
+                        <label for="department" class="form-label">
+                            Кафедра
+                        </label>
+
+                        <select
+                            name="department"
+                            id="department"
+                            class="form-select"
+                        >
+                            <option value="">Все кафедры</option>
+
+                            {% for department in departments %}
+                                <option
+                                    value="{{ department.id }}"
+                                    {% if selected_department == department.id|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ department.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            Применить фильтр
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Кафедры</h6>
+                    <h2>{{ departments_count }}</h2>
+                    <p class="mb-0 text-muted">
+                        Всего кафедр в системе
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Учебные группы</h6>
+                    <h2>{{ groups_count }}</h2>
+                    <p class="mb-0 text-muted">
+                        Всего групп в системе
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Курсы</h6>
+                    <h2>{{ courses_count }}</h2>
+                    <p class="mb-0 text-muted">
+                        Всего курсов в системе
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Студенты</h6>
+                    <h2>{{ students_count }}</h2>
+                    <p class="mb-0 text-muted">
+                        Всего студентов в системе
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Количество студентов по кафедрам</h5>
+
+                <div style="height: 350px;">
+                    <canvas id="studentsByDepartmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const departmentNames = [
+        {% for item in students_by_department %}
+            "{{ item.name|escapejs }}",
+        {% endfor %}
+    ];
+
+    const studentCounts = [
+        {% for item in students_by_department %}
+            {{ item.count }},
+        {% endfor %}
+    ];
+
+    new Chart(
+        document.getElementById('studentsByDepartmentChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: departmentNames,
+                datasets: [{
+                    label: 'Количество студентов',
+                    data: studentCounts
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+</script>
+
+    <div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Количество групп по кафедрам</h5>
+
+                <div style="height: 350px;">
+                    <canvas id="groupsByDepartmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const groupDepartmentNames = [
+        {% for item in groups_by_department %}
+            "{{ item.name|escapejs }}",
+        {% endfor %}
+    ];
+
+    const groupCounts = [
+        {% for item in groups_by_department %}
+            {{ item.count }},
+        {% endfor %}
+    ];
+
+    new Chart(
+        document.getElementById('groupsByDepartmentChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: groupDepartmentNames,
+                datasets: [{
+                    label: 'Количество групп',
+                    data: groupCounts
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+    </script>
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Количество курсов по кафедрам</h5>
+
+                    <div style="height: 350px;">
+                        <canvas id="coursesByDepartmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const courseDepartmentNames = [
+            {% for item in courses_by_department %}
+                "{{ item.name|escapejs }}",
+            {% endfor %}
+        ];
+
+        const courseCounts = [
+            {% for item in courses_by_department %}
+                {{ item.count }},
+            {% endfor %}
+        ];
+
+        new Chart(
+            document.getElementById('coursesByDepartmentChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: courseDepartmentNames,
+                    datasets: [{
+                        label: 'Количество курсов',
+                        data: courseCounts
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+
+
+</div>
+{% endblock %}

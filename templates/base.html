@@ -1,0 +1,434 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>
+        {% block title %}
+        Учебная система
+        {% endblock %}
+    </title>
+
+    <!-- Tabler CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
+
+    <!-- дополнительные стили -->
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- ========================= -->
+    <!-- Верхняя панель -->
+    <!-- ========================= -->
+
+    <header class="navbar navbar-expand-md d-print-none">
+
+        <div class="container-xl">
+
+            <!-- Кнопка меню на маленьком экране -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sidebar-menu"
+                    aria-controls="sidebar-menu"
+                    aria-expanded="false"
+                    aria-label="Открыть меню">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- Название приложения -->
+            <a class="navbar-brand"
+               href="{% url 'profile' %}">
+
+                <span class="fw-bold">
+                    Учебная система
+                </span>
+
+            </a>
+
+
+            <!-- Пользователь -->
+            <div class="navbar-nav flex-row order-md-last">
+
+                {% if user.is_authenticated %}
+
+                    <div class="nav-item dropdown">
+
+                        <a href="#"
+                           class="nav-link d-flex lh-1 text-reset p-0"
+                           data-bs-toggle="dropdown"
+                           aria-label="Открыть меню пользователя">
+
+                            <!-- Первая буква имени -->
+                            <span class="avatar avatar-sm">
+                                {{ user.username|first|upper }}
+                            </span>
+
+
+                            <!-- Имя пользователя -->
+                            <div class="d-none d-xl-block ps-2">
+
+                                <div>
+                                    {{ user.username }}
+                                </div>
+
+                                <div class="mt-1 small text-secondary">
+
+                                    {% if is_methodist %}
+                                        Методист
+                                    {% else %}
+                                        Пользователь
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- Выпадающее меню -->
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+
+                            <a href="{% url 'profile' %}"
+                               class="dropdown-item">
+
+                                Профиль
+
+                            </a>
+
+
+                            <div class="dropdown-divider"></div>
+
+
+                            <form method="post"
+                                  action="{% url 'logout' %}">
+
+                                {% csrf_token %}
+
+                                <button type="submit"
+                                        class="dropdown-item">
+
+                                    Выйти
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- Основная область -->
+    <!-- ========================= -->
+
+    <div class="page-wrapper">
+
+        <div class="container-xl">
+
+            <div class="row g-0">
+
+
+                <!-- ========================= -->
+                <!-- Боковое меню -->
+                <!-- ========================= -->
+
+                <aside class="col-md-3 col-lg-2">
+
+                    <div class="collapse d-md-block"
+                        id="sidebar-menu">
+
+                        <div class="navbar navbar-vertical">
+
+                        <div class="container-fluid">
+
+
+                                <!-- Заголовок меню -->
+                                <div class="navbar-nav w-100">
+
+                                    <div class="nav-item">
+
+                                        <span class="nav-link disabled">
+                                            <span class="nav-link-title">
+                                                Навигация
+                                            </span>
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- Профиль -->
+                                    <div class="nav-item">
+
+                                        <a class="nav-link
+                                            {% if request.path == '/profile/' %}
+                                                active
+                                            {% endif %}"
+                                           href="{% url 'profile' %}">
+
+                                            <span class="nav-link-icon">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+
+                                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/>
+                                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>
+
+                                                </svg>
+
+                                            </span>
+
+                                            <span class="nav-link-title">
+                                                Профиль
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+                                                                        <!-- Дашборды -->
+                                    <div class="nav-item">
+
+                                        <a class="nav-link
+                                            {% if '/dashboard/' in request.path %}
+                                                active
+                                            {% endif %}"
+                                           href="{% url 'dashboard' %}">
+
+                                            <span class="nav-link-icon">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+
+                                                    <path d="M4 19v-4"/>
+                                                    <path d="M10 19v-8"/>
+                                                    <path d="M16 19v-12"/>
+                                                    <path d="M22 19v-16"/>
+
+                                                </svg>
+
+                                            </span>
+
+                                            <span class="nav-link-title">
+                                                Дашборды
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+
+                                    <!-- Кафедры -->
+                                    <div class="nav-item">
+
+                                        <a class="nav-link
+                                            {% if '/departments/' in request.path %}
+                                                active
+                                            {% endif %}"
+                                           href="{% url 'department_list' %}">
+
+                                            <span class="nav-link-icon">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+
+                                                    <path d="M3 21l18 0"/>
+                                                    <path d="M5 21v-14l8-4v18"/>
+                                                    <path d="M19 21v-10l-6-4"/>
+                                                    <path d="M9 9l1 0"/>
+                                                    <path d="M9 13l1 0"/>
+                                                    <path d="M9 17l1 0"/>
+
+                                                </svg>
+
+                                            </span>
+
+                                            <span class="nav-link-title">
+                                                Кафедры
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+
+                                    <!-- Учебные группы -->
+                                    <div class="nav-item">
+
+                                        <a class="nav-link
+                                            {% if '/groups/' in request.path %}
+                                                active
+                                            {% endif %}"
+                                           href="{% url 'academic_group_list' %}">
+
+                                            <span class="nav-link-icon">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+
+                                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>
+                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.87"/>
+
+                                                </svg>
+
+                                            </span>
+
+                                            <span class="nav-link-title">
+                                                Учебные группы
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+
+                                    <!-- Курсы -->
+                                    <div class="nav-item">
+
+                                        <a class="nav-link
+                                            {% if '/courses/' in request.path %}
+                                                active
+                                            {% endif %}"
+                                           href="{% url 'course_list' %}">
+
+                                            <span class="nav-link-icon">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+
+                                                    <path d="M12 6l-2 -2l-5 5l2 2"/>
+                                                    <path d="M12 6l2 -2l5 5l-2 2"/>
+                                                    <path d="M12 6v14"/>
+                                                    <path d="M5 9l7 4l7 -4"/>
+
+                                                </svg>
+
+                                            </span>
+
+                                            <span class="nav-link-title">
+                                                Курсы
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+                                    <!-- Управление через REST API -->
+                                    <div class="nav-item">
+                                        <a class="nav-link {% if '/api-dashboard/' in request.path %}active{% endif %}"
+                                           href="{% url 'api_dashboard' %}">
+                                            <span class="nav-link-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                                                    <circle cx="8" cy="6" r="1"/>
+                                                    <circle cx="14" cy="12" r="1"/>
+                                                    <circle cx="10" cy="18" r="1"/>
+                                                </svg>
+                                            </span>
+                                            <span class="nav-link-title">Учебные данные</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </aside>
+
+
+
+                <!-- ========================= -->
+                <!-- Содержимое страницы -->
+                <!-- ========================= -->
+
+                <main class="col-md-9 col-lg-10">
+
+                    {% block content %}
+                    {% endblock %}
+
+                </main>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Tabler JS -->
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js">
+</script>
+
+{% block extra_js %}{% endblock %}\n</body>
+
+</html>

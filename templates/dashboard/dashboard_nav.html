@@ -1,0 +1,28 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex flex-wrap gap-2">
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="btn btn-outline-primary"
+            >
+                Общая статистика
+            </a>
+
+            <a
+                href="{% url 'groups_dashboard' %}"
+                class="btn btn-outline-primary"
+            >
+                Учебные группы
+            </a>
+
+            <a
+                href="{% url 'courses_dashboard' %}"
+                class="btn btn-outline-primary"
+            >
+                Курсы
+            </a>
+
+        </div>
+    </div>
+</div>

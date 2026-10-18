@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Учебные группы
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1 class="page-title mb-1">
+        Учебные группы
+    </h1>
+
+    <div class="text-secondary">
+        Список учебных групп
+    </div>
+
+</div>
+
+
+{% if is_methodist %}
+
+    <div class="mb-4">
+
+        <a href="{% url 'academic_group_create' %}"
+           class="btn btn-primary">
+
+            Добавить группу
+
+        </a>
+
+    </div>
+
+{% endif %}
+
+
+<div class="card">
+
+    <div class="table-responsive">
+
+        <table class="table table-vcenter table-hover card-table">
+
+            <thead>
+
+                <tr>
+
+                    <th style="width: 100px;">
+                        ID
+                    </th>
+
+                    <th>
+                        Название группы
+                    </th>
+
+                    <th>
+                        Кафедра
+                    </th>
+
+                    {% if is_methodist %}
+
+                        <th class="w-1">
+                            Действия
+                        </th>
+
+                    {% endif %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for academic_group in academic_groups %}
+
+                    <tr>
+
+                        <td class="text-secondary">
+                            {{ academic_group.id }}
+                        </td>
+
+
+                        <td>
+
+                            <div class="fw-semibold">
+                                {{ academic_group.name }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if academic_group.department %}
+
+                                {{ academic_group.department.name }}
+
+                            {% else %}
+
+                                <span class="text-secondary">
+                                    Не указана
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        {% if is_methodist %}
+
+                            <td>
+
+                                <div class="btn-list flex-nowrap">
+
+                                    <a href="{% url 'academic_group_update' academic_group.id %}"
+                                       class="btn btn-sm btn-outline-primary">
+
+                                        Изменить
+
+                                    </a>
+
+
+                                    <a href="{% url 'academic_group_delete' academic_group.id %}"
+                                       class="btn btn-sm btn-outline-danger">
+
+                                        Удалить
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        {% endif %}
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="{% if is_methodist %}4{% else %}3{% endif %}"
+                            class="text-center py-5">
+
+                            <div class="text-secondary">
+                                Учебных групп пока нет.
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

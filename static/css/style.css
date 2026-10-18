@@ -1,0 +1,346 @@
+/* =========================================
+   Общие настройки страницы
+   ========================================= */
+
+body {
+    background-color: #f5f7fb;
+}
+
+
+/* =========================================
+   Верхняя панель
+   ========================================= */
+
+.page > .navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e8eb;
+}
+
+
+/* Название приложения */
+
+.navbar-brand {
+    font-size: 1.15rem;
+}
+
+
+/* =========================================
+   Основная область
+   ========================================= */
+
+.page-wrapper {
+    min-height: calc(100vh - 60px);
+}
+
+
+/* Контейнер с меню и содержимым */
+
+.page-wrapper > .container-xl {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* =========================================
+   Боковое меню
+   ========================================= */
+
+.navbar-vertical {
+    min-height: calc(100vh - 60px);
+
+    background-color: #ffffff;
+
+    border-right: 1px solid #e6e8eb;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+/* Внутренние отступы меню */
+
+.navbar-vertical .container-fluid {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+
+/* Заголовок "Навигация" */
+
+.navbar-vertical .nav-link.disabled {
+    margin-bottom: 8px;
+
+    padding-left: 12px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    color: #9aa0a6;
+}
+
+
+/* Пункты меню */
+
+.navbar-vertical .nav-link {
+    display: flex;
+    align-items: center;
+
+    min-height: 42px;
+
+    margin-bottom: 4px;
+
+    padding: 9px 12px;
+
+    border-radius: 8px;
+
+    color: #4b5563;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+/* Иконки */
+
+.navbar-vertical .nav-link-icon {
+    width: 24px;
+    height: 24px;
+
+    margin-right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Текст пунктов */
+
+.navbar-vertical .nav-link-title {
+    font-size: 0.95rem;
+}
+
+
+/* Наведение */
+
+.navbar-vertical .nav-link:hover {
+    background-color: #f1f5f9;
+
+    color: #206bc4;
+}
+
+
+/* Активный пункт */
+
+.navbar-vertical .nav-link.active {
+    background-color: #e9f2ff;
+
+    color: #206bc4;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   Основное содержимое
+   ========================================= */
+
+main {
+    padding: 24px;
+}
+
+
+/* =========================================
+   Карточки
+   ========================================= */
+
+.card {
+    border: 1px solid #e6e8eb;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   Кнопки
+   ========================================= */
+
+.btn {
+    border-radius: 7px;
+}
+
+
+/* =========================================
+   Таблицы
+   ========================================= */
+
+.table {
+    background-color: #ffffff;
+}
+
+
+/* =========================================
+   Адаптация для планшетов
+   ========================================= */
+
+@media (max-width: 991.98px) {
+
+    main {
+        padding: 20px;
+    }
+
+}
+
+
+/* =========================================
+   Адаптация для телефонов
+   ========================================= */
+
+@media (max-width: 767.98px) {
+
+    main {
+        padding: 16px;
+    }
+
+    .navbar-vertical {
+        min-height: auto;
+
+        border-right: none;
+        border-bottom: 1px solid #e6e8eb;
+    }
+
+}
+
+/* =========================================
+   Профиль пользователя
+   ========================================= */
+
+.profile-card {
+    max-width: 900px;
+}
+
+
+/* Большой аватар */
+
+.profile-card .avatar-xl {
+    width: 64px;
+    height: 64px;
+
+    font-size: 1.4rem;
+}
+
+
+/* Заголовок страницы */
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* На маленьком экране */
+
+@media (max-width: 767.98px) {
+
+    .profile-card {
+        max-width: 100%;
+    }
+
+    .profile-card .card-body {
+        padding: 20px;
+    }
+
+}
+
+/* =========================================
+   Формы
+   ========================================= */
+
+.form-card {
+    max-width: 800px;
+}
+
+
+.form-card .form-label {
+    font-weight: 600;
+}
+
+
+.form-card .form-control,
+.form-card .form-select {
+    max-width: 100%;
+}
+
+
+.form-card textarea {
+    min-height: 120px;
+}
+
+
+@media (max-width: 767.98px) {
+
+    .form-card {
+        max-width: 100%;
+    }
+
+}
+
+/* =========================================
+   Подтверждение удаления
+   ========================================= */
+
+.delete-card {
+    max-width: 700px;
+}
+
+
+.delete-card .avatar {
+    flex-shrink: 0;
+}
+
+
+@media (max-width: 767.98px) {
+
+    .delete-card {
+        max-width: 100%;
+    }
+
+}
+
+/* =========================================
+   Исправление положения бокового меню
+   ========================================= */
+
+.navbar-vertical {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+}
+
+
+.navbar-vertical .container-fluid {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+}
+
+
+.navbar-vertical .navbar-nav {
+    width: 100%;
+    align-items: stretch !important;
+}
+
+
+/* На больших экранах меню занимает всю высоту */
+
+@media (min-width: 768px) {
+
+    .navbar-vertical {
+        min-height: calc(100vh - 60px);
+    }
+
+}

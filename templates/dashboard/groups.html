@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <h1 class="mb-4">Дашборд учебных групп</h1>
+
+    {% include 'dashboard/dashboard_nav.html' %}
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get">
+            <div class="row align-items-end">
+
+                <div class="col-md-8">
+                    <label for="department" class="form-label">
+                        Кафедра
+                    </label>
+
+                    <select
+                        name="department"
+                        id="department"
+                        class="form-select"
+                    >
+                        <option value="">Все кафедры</option>
+
+                        {% for department in departments %}
+                            <option
+                                value="{{ department.id }}"
+                                {% if selected_department == department.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ department.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                    >
+                        Применить фильтр
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+    <div class="row g-4 mb-4">
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Учебные группы</h6>
+                <h2>{{ groups_count }}</h2>
+                <p class="mb-0 text-muted">
+                    Всего групп в системе
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title mb-3">
+            Учебные группы
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Группа</th>
+                        <th>Кафедра</th>
+                        <th>Количество студентов</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for group in groups_data %}
+                        <tr>
+                            <td>{{ group.name }}</td>
+                            <td>{{ group.department }}</td>
+                            <td>{{ group.students_count }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                Учебные группы отсутствуют
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            Количество студентов по учебным группам
+        </h5>
+
+        <div style="height: 400px;">
+            <canvas id="studentsByGroupChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const groupNames = [
+        {% for group in groups_data %}
+            "{{ group.name|escapejs }}",
+        {% endfor %}
+    ];
+
+    const groupStudentCounts = [
+        {% for group in groups_data %}
+            {{ group.students_count }},
+        {% endfor %}
+    ];
+
+    new Chart(
+        document.getElementById('studentsByGroupChart'),
+        {
+            type: 'bar',
+
+            data: {
+                labels: groupNames,
+
+                datasets: [{
+                    label: 'Количество студентов',
+                    data: groupStudentCounts
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+</script>
+</div>
+{% endblock %}

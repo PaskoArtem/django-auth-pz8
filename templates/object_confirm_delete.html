@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Удаление
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1 class="page-title mb-1">
+        Удаление
+    </h1>
+
+    <div class="text-secondary">
+        Подтверждение удаления записи
+    </div>
+
+</div>
+
+
+<div class="card delete-card">
+
+    <div class="card-body">
+
+        <div class="d-flex align-items-start">
+
+            <div class="avatar avatar-md bg-danger-lt text-danger me-3">
+                !
+            </div>
+
+            <div>
+
+                <h3 class="card-title mb-2">
+                    Вы уверены?
+                </h3>
+
+                <div class="text-secondary">
+
+                    Вы собираетесь удалить запись:
+
+                    <strong>
+                        {{ object }}
+                    </strong>
+
+                </div>
+
+                <div class="text-secondary mt-2">
+                    Это действие нельзя отменить.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form method="post"
+              class="mt-4">
+
+            {% csrf_token %}
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    Удалить
+
+                </button>
+
+
+                <a href="javascript:history.back()"
+                   class="btn btn-outline-secondary">
+
+                    Отмена
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Курсы
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1 class="page-title mb-1">
+        Курсы
+    </h1>
+
+    <div class="text-secondary">
+        Список доступных учебных курсов
+    </div>
+
+</div>
+
+
+{% if is_methodist %}
+
+    <div class="mb-4">
+
+        <a href="{% url 'course_create' %}"
+           class="btn btn-primary">
+
+            Добавить курс
+
+        </a>
+
+    </div>
+
+{% endif %}
+
+
+<div class="card">
+
+    <div class="table-responsive">
+
+        <table class="table table-vcenter table-hover card-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Название</th>
+
+                    <th>Кафедра</th>
+
+                    <th>Описание</th>
+
+                    {% if is_methodist %}
+
+                        <th class="w-1">
+                            Действия
+                        </th>
+
+                    {% endif %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for course in courses %}
+
+                    <tr>
+
+                        <td class="text-secondary">
+                            {{ course.id }}
+                        </td>
+
+
+                        <td>
+
+                            <div class="fw-semibold">
+                                {{ course.title }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if course.department %}
+
+                                {{ course.department.name }}
+
+                            {% else %}
+
+                                <span class="text-secondary">
+                                    Не указана
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if course.description %}
+
+                                {{ course.description }}
+
+                            {% else %}
+
+                                <span class="text-secondary">
+                                    Нет описания
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        {% if is_methodist %}
+
+                            <td>
+
+                                <div class="btn-list flex-nowrap">
+
+                                    <a href="{% url 'course_update' course.id %}"
+                                       class="btn btn-sm btn-outline-primary">
+
+                                        Изменить
+
+                                    </a>
+
+
+                                    <a href="{% url 'course_delete' course.id %}"
+                                       class="btn btn-sm btn-outline-danger">
+
+                                        Удалить
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        {% endif %}
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="{% if is_methodist %}5{% else %}4{% endif %}"
+                            class="text-center py-5">
+
+                            <div class="text-secondary">
+                                Курсов пока нет.
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

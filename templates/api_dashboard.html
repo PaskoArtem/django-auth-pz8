@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Управление учебными данными через API{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none mt-4 mb-3">
+  <div class="row align-items-center">
+    <div class="col">
+      <h1 class="page-title">Управление учебными данными</h1>
+    </div>
+    <div class="col-auto">
+    </div>
+  </div>
+</div>
+
+<div id="api-message" class="alert d-none" role="status" aria-live="polite"></div>
+<div class="row row-cards mb-3">
+  <div class="col-sm-4"><div class="card"><div class="card-body">
+    <div class="subheader">Кафедры</div><div class="h1 mb-0" id="departments-count">—</div>
+  </div></div></div>
+  <div class="col-sm-4"><div class="card"><div class="card-body">
+    <div class="subheader">Учебные группы</div><div class="h1 mb-0" id="groups-count">—</div>
+  </div></div></div>
+  <div class="col-sm-4"><div class="card"><div class="card-body">
+    <div class="subheader">Курсы</div><div class="h1 mb-0" id="courses-count">—</div>
+  </div></div></div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">Справочники</div>
+    <div class="ms-auto">
+      <select id="entity-select" class="form-select">
+        <option value="courses">Курсы</option>
+        <option value="groups">Учебные группы</option>
+      </select>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="editor" class="{% if not is_methodist %}d-none{% endif %} mb-4">
+      <h3 id="form-heading">Добавить курс</h3>
+      <form id="entity-form">
+        {% csrf_token %}
+        <input type="hidden" id="object-id">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" id="name-label" for="object-name">Название курса</label>
+            <input id="object-name" class="form-control" required maxlength="200">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="department-select">Кафедра</label>
+            <select id="department-select" class="form-select" required></select>
+          </div>
+          <div class="col-12" id="description-wrap">
+            <label class="form-label" for="object-description">Описание</label>
+            <textarea id="object-description" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn btn-primary" type="submit" id="save-button">Сохранить</button>
+          <button class="btn btn-outline-secondary d-none" type="button" id="cancel-edit">Отмена</button>
+        </div>
+      </form>
+      <hr>
+    </div>
+    <div class="d-flex gap-2 mb-3">
+      <input id="search-input" class="form-control" placeholder="Поиск по названию">
+      <button id="refresh-button" class="btn btn-outline-secondary" type="button">Обновить</button>
+    </div>
+    <div id="loading" class="text-secondary py-3 d-none">Загрузка данных…</div>
+    <div class="table-responsive">
+      <table class="table table-vcenter">
+        <thead><tr><th>ID</th><th>Название</th><th>Кафедра</th><th id="extra-heading">Описание</th>{% if is_methodist %}<th class="text-end">Действия</th>{% endif %}</tr></thead>
+        <tbody id="entities-table"></tbody>
+      </table>
+    </div>
+    <div id="empty-state" class="text-secondary text-center py-4 d-none">Записей нет.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  window.PZ7_CONFIG = { isMethodist: {{ is_methodist|yesno:"true,false" }} };
+</script>
+<script src="{% static 'js/api_dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Профиль
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Заголовок страницы -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="page-title">
+            Профиль
+        </h1>
+
+        <div class="text-secondary">
+            Информация о текущем пользователе
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Карточка профиля -->
+<div class="card profile-card">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <!-- Аватар -->
+            <div class="col-auto">
+
+                <span class="avatar avatar-xl">
+                    {{ user.username|first|upper }}
+                </span>
+
+            </div>
+
+
+            <!-- Основная информация -->
+            <div class="col">
+
+                <h2 class="mb-1">
+                    {{ user.username }}
+                </h2>
+
+                <div class="text-secondary">
+                    Пользователь учебной системы
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Разделитель -->
+        <div class="hr-text my-4">
+            Информация
+        </div>
+
+
+        <!-- Информация о пользователе -->
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <div class="text-secondary small mb-1">
+                    Имя пользователя
+                </div>
+
+                <div class="fw-semibold">
+                    {{ user.username }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <div class="text-secondary small mb-1">
+                    Статус
+                </div>
+
+                <div>
+
+                    {% if is_methodist %}
+
+                        <span class="badge bg-green text-green-fg">
+                            Методист
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-blue text-blue-fg">
+                            Пользователь
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Нижняя часть карточки -->
+    <div class="card-footer">
+
+        <a href="{% url 'course_list' %}"
+           class="btn btn-primary">
+
+            Посмотреть курсы
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
