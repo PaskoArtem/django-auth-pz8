@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .api_views import AcademicGroupViewSet, CourseViewSet, DepartmentViewSet
+from .api_views import (AcademicGroupViewSet, CourseViewSet, DepartmentViewSet, EquipmentViewSet, EquipmentRequestViewSet)
 from . import views
 
 
@@ -8,11 +8,14 @@ router = DefaultRouter()
 router.register('departments', DepartmentViewSet, basename='api-departments')
 router.register('groups', AcademicGroupViewSet, basename='api-groups')
 router.register('courses', CourseViewSet, basename='api-courses')
+router.register('equipment', EquipmentViewSet, basename='api-equipment')
+router.register('equipment-requests', EquipmentRequestViewSet, basename='api-equipment-requests')
 
 
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api-dashboard/', views.api_dashboard, name='api_dashboard'),
+    path('equipment-workflow/', views.equipment_workflow, name='equipment_workflow'),
     path(
         'profile/',
         views.profile,

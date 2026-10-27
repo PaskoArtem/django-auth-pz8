@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Выдача оборудования{% endblock %}
+{% block content %}
+<div class="page-header mt-4 mb-3">
+  <div class="row align-items-center">
+    <div class="col"><h1 class="page-title">Заявки на оборудование</h1><div class="text-secondary">Создание заявок, согласование выдачи и история операций</div></div>
+  </div>
+</div>
+<div id="workflow-message" class="alert d-none" role="status" aria-live="polite"></div>
+<div class="row row-cards mb-3">
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="subheader">Доступно единиц оборудования</div><div class="h1 mb-0" id="stock-total">—</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="subheader">Мои заявки / все заявки</div><div class="h1 mb-0" id="request-total">—</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="subheader">Текущий пользователь</div><div class="h3 mb-0">{{ request.user.username }}</div></div></div></div>
+</div>
+<div class="card mb-3">
+  <div class="card-header"><h3 class="card-title">Создать заявку</h3></div>
+  <div class="card-body">
+    <form id="request-form">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-4"><label class="form-label" for="equipment">Оборудование</label><select class="form-select" id="equipment" required></select></div>
+        <div class="col-md-2"><label class="form-label" for="quantity">Количество</label><input class="form-control" id="quantity" type="number" min="1" value="1" required></div>
+        <div class="col-md-6"><label class="form-label" for="purpose">Цель использования</label><input class="form-control" id="purpose" maxlength="500" required placeholder="Например, лабораторная работа по электронике"></div>
+      </div>
+      <button class="btn btn-primary mt-3" type="submit" id="request-save">Отправить заявку</button> <button class="btn btn-outline-secondary mt-3 d-none" type="button" id="request-cancel-edit">Отмена</button>
+    </form>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header"><h3 class="card-title">Список заявок</h3></div>
+  <div class="card-body">
+    <div class="row g-2 mb-3">
+      <div class="col-md-3"><label class="form-label" for="status-filter">Статус</label><select id="status-filter" class="form-select"><option value="">Все статусы</option><option value="pending">Ожидает согласования</option><option value="approved">Согласована</option><option value="issued">Выдано</option><option value="returned">Возвращено</option><option value="cancelled">Отменена</option></select></div>
+      <div class="col-md-3"><label class="form-label" for="category-filter">Категория оборудования</label><select id="category-filter" class="form-select"><option value="">Все категории</option><option value="computer">Компьютерная техника</option><option value="lab">Лабораторное оборудование</option><option value="presentation">Презентационное оборудование</option><option value="other">Другое</option></select></div>
+      <div class="col-md-2 d-flex align-items-end"><button id="refresh" class="btn btn-outline-secondary w-100" type="button">Обновить</button></div>
+    </div>
+    <div class="table-responsive"><table class="table table-vcenter"><thead><tr><th>№</th><th>Оборудование</th><th>Заявитель</th><th>Кол-во</th><th>Статус</th><th>Цель</th><th>История</th><th>Действия</th></tr></thead><tbody id="request-rows"></tbody></table></div>
+    <div id="no-requests" class="text-secondary text-center py-3 d-none">Заявок по выбранным фильтрам нет.</div>
+  </div>
+</div>
+<div class="modal modal-blur fade" id="history-modal" tabindex="-1" aria-hidden="true">
+ <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">История заявки</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button></div><div class="modal-body"><div id="history-content"></div></div></div></div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>window.WORKFLOW_CONFIG = { isMethodist: {{ is_methodist|yesno:"true,false" }} };</script>
+<script src="{% static 'js/equipment_workflow.js' %}"></script>
+{% endblock %}

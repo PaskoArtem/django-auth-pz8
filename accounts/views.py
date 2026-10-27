@@ -12,6 +12,11 @@ def is_methodist(user):
 
 
 @login_required
+def equipment_workflow(request):
+    return render(request, 'equipment_workflow.html', {'is_methodist': is_methodist(request.user)})
+
+
+@login_required
 def api_dashboard(request):
     return render(request, 'api_dashboard.html', {'is_methodist': is_methodist(request.user)})
 

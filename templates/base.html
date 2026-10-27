@@ -375,6 +375,22 @@
 
                                     </div>
 
+                                    <!-- Заявки на оборудование -->
+                                    <div class="nav-item">
+                                        <a class="nav-link {% if '/equipment-workflow/' in request.path %}active{% endif %}"
+                                           href="{% url 'equipment_workflow' %}">
+                                            <span class="nav-link-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                                    <path d="M9 4v4h6V4M8 14h8M8 18h5"/>
+                                                </svg>
+                                            </span>
+                                            <span class="nav-link-title">Заявки на оборудование</span>
+                                        </a>
+                                    </div>
+
                                     <!-- Управление через REST API -->
                                     <div class="nav-item">
                                         <a class="nav-link {% if '/api-dashboard/' in request.path %}active{% endif %}"
